@@ -55,7 +55,7 @@ export async function GET(_request: NextRequest) {
       const date = new Date()
       date.setDate(date.getDate() - i)
       const dateStr = date.toISOString().split('T')[0]
-      const found = surveyPerDay.find((d) => d.date === dateStr)
+      const found = surveyPerDay.find((d: { date: string; count: number }) => d.date === dateStr)
       surveyPerDayFilled.push({
         date: dateStr,
         count: found ? found.count : 0,
