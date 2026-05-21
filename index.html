@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flowee — Karangan Bunga Artisan Segar & Indah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Cormorant+Garamond:ital,wght@1,400;1,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fdf9f3;
+      --primary: #173901;
+      --primary-container: #2d5016;
+      --on-primary-container: #98c27b;
+      --secondary: #885202;
+      --secondary-container: #feb563;
+      --tertiary: #725c00;
+      --tertiary-container: #c9a82c;
+      --on-surface: #1c1c18;
+      --on-surface-variant: #43493d;
+      --outline: #73796c;
+      --outline-variant: #c3c9b9;
+      --surface-low: #f7f3ed;
+      --surface: #f1ede7;
+      --surface-high: #ebe8e2;
+      --inverse-surface: #31302d;
+      --white: #ffffff;
+      --max-w: 1280px;
+      --section-gap: 120px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "DM Sans", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--on-surface);
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    .display {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 400; line-height: 1.1; letter-spacing: -0.02em;
+    }
+    .headline {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 400; line-height: 1.2;
+    }
+    .accent-italic {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 20px; font-style: italic;
+    }
+    .label-caps {
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .body-sm { font-size: 14px; }
+    /* Fade-in */
+    .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,249,243,0.93);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo {
+      font-family: "Playfair Display", serif;
+      font-size: 22px; font-weight: 700;
+      color: var(--primary); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--on-surface-variant);
+      font-size: 15px; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 22px; border-radius: 0.75rem;
+      font-family: "DM Sans", sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none; border: none;
+      transition: all 0.25s ease; line-height: 1;
+    }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover {
+      background: var(--primary-container);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(23,57,1,0.22);
+    }
+    .btn-secondary {
+      background: transparent; color: var(--on-surface);
+      border: 1.5px solid var(--on-surface);
+    }
+    .btn-secondary:hover { background: var(--surface); transform: translateY(-2px); }
+    .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 0.5rem; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--on-surface); margin: 5px 0;
+      transition: all 0.3s; border-radius: 2px;
+    }
+    .mobile-nav {
+      display: none; flex-direction: column;
+      background: var(--bg); border-top: 1px solid var(--outline-variant);
+      padding: 16px 24px 24px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      padding: 13px 0; text-decoration: none;
+      color: var(--on-surface-variant); font-size: 16px; font-weight: 500;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .mobile-nav .btn { margin-top: 16px; justify-content: center; }
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 88px 0 108px;
+      background: var(--bg);
+    }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 48px; position: relative; z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--secondary); color: var(--white);
+      padding: 6px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 700; margin-bottom: 20px;
+      animation: pulse-badge 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-badge { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+    .hero-tagline { color: var(--secondary); margin-bottom: 14px; }
+    .hero-headline { color: var(--primary); margin-bottom: 20px; }
+    .hero-sub { color: var(--on-surface-variant); max-width: 480px; margin-bottom: 36px; font-size: 17px; }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-visual {
+      position: relative; display: flex;
+      justify-content: center; align-items: center; min-height: 460px;
+    }
+    /* ===== PILLS ===== */
+    .pills-section { background: var(--primary); padding: 28px 0; }
+    .pills-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.1); color: var(--white);
+      padding: 10px 22px; border-radius: 999px;
+      font-size: 14px; font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: background 0.2s;
+    }
+    .pill:hover { background: rgba(255,255,255,0.18); }
+    /* ===== SECTIONS ===== */
+    .section { padding: var(--section-gap) 0; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .label-caps { color: var(--secondary); margin-bottom: 8px; display: block; }
+    .section-header .headline { color: var(--primary); margin-bottom: 10px; }
+    .section-header .accent-italic { color: var(--on-surface-variant); }
+    /* Batik bg */
+    .batik-bg {
+      background-color: var(--surface-low);
+      background-image:
+        radial-gradient(ellipse at 15% 50%, rgba(201,168,44,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(23,57,1,0.06) 0%, transparent 50%),
+        repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(201,168,44,0.035) 20px, rgba(201,168,44,0.035) 21px),
+        repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(23,57,1,0.025) 20px, rgba(23,57,1,0.025) 21px);
+    }
+    /* ===== PRODUCTS ===== */
+    .products-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    }
+    .product-card {
+      background: var(--surface); border-radius: 1rem; overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(23,57,1,0.12);
+      background: #e8e3da;
+    }
+    .product-img-wrap { padding: 12px 12px 0; }
+    .product-img {
+      width: 100%; height: 210px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 68px;
+      border-radius: 2rem 0.5rem 2rem 0.5rem;
+    }
+    .product-body { padding: 16px 20px 20px; }
+    .product-name {
+      font-family: "Playfair Display", serif; font-size: 18px;
+      font-weight: 400; color: var(--primary); margin-bottom: 6px;
+    }
+    .product-price { font-size: 14px; font-weight: 700; color: var(--secondary); margin-bottom: 16px; }
+    /* ===== HOW TO ORDER ===== */
+    .steps-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 32px; position: relative;
+    }
+    .steps-connector {
+      position: absolute; top: 28px;
+      left: calc(33.33% - 16px); right: calc(33.33% - 16px);
+      height: 2px; background: var(--outline-variant); z-index: 0;
+    }
+    .step-card {
+      text-align: center; position: relative; z-index: 1;
+      padding: 36px 24px; background: var(--bg);
+      border-radius: 1.5rem; border: 1px solid var(--outline-variant);
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    .step-card:hover { box-shadow: 0 8px 32px rgba(201,168,44,0.15); background: #fdf6e8; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--secondary); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700;
+      margin: 0 auto 20px;
+    }
+    .step-title { font-family: "Playfair Display", serif; font-size: 20px; color: var(--primary); margin-bottom: 10px; }
+    .step-desc { color: var(--on-surface-variant); font-size: 15px; }
+    /* ===== TESTIMONIALS ===== */
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .testi-card {
+      background: var(--bg); border: 1px solid var(--outline-variant);
+      border-radius: 1.25rem; padding: 28px;
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    .testi-card:hover { box-shadow: 0 8px 32px rgba(201,168,44,0.15); background: #fdf6e8; }
+    .testi-stars { color: var(--tertiary-container); font-size: 18px; margin-bottom: 12px; }
+    .testi-text {
+      font-family: "Cormorant Garamond", serif; font-size: 18px;
+      font-style: italic; color: var(--on-surface);
+      margin-bottom: 16px; line-height: 1.55;
+    }
+    .testi-author { font-size: 13px; font-weight: 700; color: var(--secondary); }
+    /* ===== FAQ ===== */
+    .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--bg); border: 1px solid var(--outline-variant);
+      border-radius: 1rem; overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; text-align: left; padding: 20px 24px;
+      background: none; border: none; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: "DM Sans", sans-serif; font-size: 16px; font-weight: 600;
+      color: var(--on-surface); transition: background 0.2s; gap: 16px;
+    }
+    .faq-q:hover { background: var(--surface-low); }
+    .faq-icon { font-size: 20px; color: var(--secondary); transition: transform 0.3s; flex-shrink: 0; }
+    .faq-q.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 24px; color: var(--on-surface-variant);
+      font-size: 15px; line-height: 1.7;
+    }
+    .faq-a.open { max-height: 200px; padding: 0 24px 20px; }
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--inverse-surface);
+      color: rgba(255,255,255,0.85);
+      padding: 72px 0 40px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-logo {
+      font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700;
+      color: var(--white); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .footer-tagline {
+      font-family: "Cormorant Garamond", serif; font-style: italic;
+      font-size: 16px; color: var(--on-primary-container); margin-bottom: 12px;
+    }
+    .footer-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+    .footer-col-title {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 20px;
+    }
+    .footer-contact-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 14px; font-size: 14px; color: rgba(255,255,255,0.75);
+    }
+    .footer-contact-item .material-icons {
+      font-size: 18px; color: var(--on-primary-container); margin-top: 2px; flex-shrink: 0;
+    }
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.35); text-align: center; }
+    .btn-wa {
+      background: #25D366; color: var(--white);
+      border-radius: 0.75rem; padding: 14px 24px;
+      font-weight: 700; font-size: 15px;
+      display: inline-flex; align-items: center; gap: 10px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-wa:hover { background: #1ebe5d; transform: translateY(-2px); }
+    /* ===== FLOATING WA ===== */
+    .float-wa {
+      position: fixed; bottom: 28px; right: 28px; z-index: 999;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #25D366; color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+      text-decoration: none;
+      animation: float-bounce 3s ease-in-out infinite;
+      transition: box-shadow 0.2s;
+    }
+    .float-wa:hover { box-shadow: 0 12px 32px rgba(37,211,102,0.55); animation: none; transform: scale(1.1); }
+    @keyframes float-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid > *:last-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
+      :root { --section-gap: 72px; }
+      .nav-links, .navbar-cta { display: none; }
+      .hamburger { display: block; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .products-grid { grid-template-columns: 1fr; }
+      .steps-row { grid-template-columns: 1fr; }
+      .steps-connector { display: none; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-btns { flex-direction: column; }
+      .hero-btns .btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<header class="navbar">
+  <div class="container">
+    <nav class="navbar-inner">
+      <a href="#" class="nav-logo">🌸 Flowee</a>
+      <ul class="nav-links">
+        <li><a href="#produk">Produk</a></li>
+        <li><a href="#keunggulan">Keunggulan</a></li>
+        <li><a href="#cara-pesan">Cara Pesan</a></li>
+        <li><a href="#testimoni">Testimoni</a></li>
+      </ul>
+      <a href="https://wa.me/6281200000000" target="_blank" rel="noopener" class="btn btn-primary navbar-cta">Pesan Sekarang</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#produk">Produk</a>
+    <a href="#keunggulan">Keunggulan</a>
+    <a href="#cara-pesan">Cara Pesan</a>
+    <a href="#testimoni">Testimoni</a>
+    <a href="https://wa.me/6281200000000" target="_blank" rel="noopener" class="btn btn-primary">Pesan Sekarang</a>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <!-- Left: Text -->
+      <div class="hero-content fade-in">
+        <div class="hero-badge">
+          <span class="material-icons" style="font-size:16px;">bolt</span>
+          Respons &lt; 5 Menit
+        </div>
+        <p class="accent-italic hero-tagline">Setiap Bunga, Cerita yang Mengalir</p>
+        <h1 class="display hero-headline">Wujudkan Momen Spesial dengan Bunga Pilihan.</h1>
+        <p class="hero-sub">Rangkaian bunga segar dan elegan, dirancang khusus untuk setiap momen berharga Anda. Flowee menghadirkan keindahan yang berbicara dari hati.</p>
+        <div class="hero-btns">
+          <a href="#produk" class="btn btn-primary">
+            <span class="material-icons" style="font-size:18px;">local_florist</span>
+            Lihat Katalog
+          </a>
+          <a href="https://wa.me/6281200000000" target="_blank" rel="noopener" class="btn btn-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Chat WhatsApp
+          </a>
+        </div>
+      </div>
+      <!-- Right: Decorative SVG -->
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;filter:drop-shadow(0 24px 48px rgba(23,57,1,0.15))">
+          <!-- Large monstera leaf 1 -->
+          <ellipse cx="300" cy="200" rx="160" ry="220" fill="#2d5016" opacity="0.18" transform="rotate(-20 300 200)"/>
+          <ellipse cx="300" cy="200" rx="130" ry="185" fill="#173901" opacity="0.22" transform="rotate(-20 300 200)"/>
+          <!-- Leaf veins -->
+          <line x1="300" y1="60" x2="300" y2="340" stroke="#98c27b" stroke-width="2.5" opacity="0.5" transform="rotate(-20 300 200)"/>
+          <line x1="300" y1="140" x2="240" y2="200" stroke="#98c27b" stroke-width="1.5" opacity="0.4" transform="rotate(-20 300 200)"/>
+          <line x1="300" y1="170" x2="360" y2="220" stroke="#98c27b" stroke-width="1.5" opacity="0.4" transform="rotate(-20 300 200)"/>
+          <line x1="300" y1="200" x2="235" y2="255" stroke="#98c27b" stroke-width="1.5" opacity="0.4" transform="rotate(-20 300 200)"/>
+          <line x1="300" y1="230" x2="365" y2="275" stroke="#98c27b" stroke-width="1.5" opacity="0.4" transform="rotate(-20 300 200)"/>
+          <!-- Monstera holes -->
+          <ellipse cx="270" cy="195" rx="18" ry="28" fill="#fdf9f3" opacity="0.6" transform="rotate(-20 300 200)"/>
+          <ellipse cx="330" cy="225" rx="16" ry="24" fill="#fdf9f3" opacity="0.6" transform="rotate(-20 300 200)"/>
+          <!-- Second leaf -->
+          <ellipse cx="180" cy="280" rx="110" ry="160" fill="#885202" opacity="0.12" transform="rotate(15 180 280)"/>
+          <ellipse cx="180" cy="280" rx="85" ry="130" fill="#c9a82c" opacity="0.14" transform="rotate(15 180 280)"/>
+          <line x1="180" y1="165" x2="180" y2="395" stroke="#feb563" stroke-width="2" opacity="0.35" transform="rotate(15 180 280)"/>
+          <!-- Third accent leaf -->
+          <ellipse cx="390" cy="360" rx="80" ry="120" fill="#173901" opacity="0.15" transform="rotate(-35 390 360)"/>
+          <ellipse cx="390" cy="360" rx="60" ry="95" fill="#2d5016" opacity="0.18" transform="rotate(-35 390 360)"/>
+          <!-- Flower accent -->
+          <circle cx="420" cy="120" r="40" fill="#feb563" opacity="0.25"/>
+          <circle cx="420" cy="120" r="24" fill="#885202" opacity="0.3"/>
+          <circle cx="420" cy="120" r="10" fill="#c9a82c" opacity="0.6"/>
+          <!-- Small dots -->
+          <circle cx="140" cy="140" r="8" fill="#98c27b" opacity="0.5"/>
+          <circle cx="460" cy="300" r="6" fill="#feb563" opacity="0.5"/>
+          <circle cx="100" cy="380" r="10" fill="#c9a82c" opacity="0.4"/>
+          <circle cx="480" cy="420" r="7" fill="#98c27b" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURE PILLS ===== -->
+<section class="pills-section" id="keunggulan">
+  <div class="container">
+    <div class="pills-row">
+      <div class="pill">🚚 Kirim Cepat</div>
+      <div class="pill">🌸 Bunga Segar</div>
+      <div class="pill">🎨 Custom Desain</div>
+      <div class="pill">⏱ Respons &lt; 5 Menit</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section class="section batik-bg" id="produk">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="label-caps">Koleksi Tanda Mata</span>
+      <h2 class="headline">Pilihan untuk Setiap Momen</h2>
+      <p class="accent-italic">Pilihan sempurna untuk setiap kesempatan</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card fade-in">
+        <div class="product-img-wrap">
+          <div class="product-img" style="background: linear-gradient(135deg, #d4edda 0%, #a8d5b5 50%, #6db88a 100%);">🎓</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Buket Wisuda Tropis</h3>
+          <p class="product-price">Mulai dari Rp 250.000</p>
+          <a href="https://wa.me/6281200000000?text=Halo%2C%20saya%20tertarik%20dengan%20Buket%20Wisuda%20Tropis" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Tanya &amp; Pesan</a>
+        </div>
+      </div>
+
+      <div class="product-card fade-in">
+        <div class="product-img-wrap">
+          <div class="product-img" style="background: linear-gradient(135deg, #fce4ec 0%, #f48fb1 50%, #e91e8c 100%);">💐</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Hand Bouquet Romantis</h3>
+          <p class="product-price">Mulai dari Rp 350.000</p>
+          <a href="https://wa.me/6281200000000?text=Halo%2C%20saya%20tertarik%20dengan%20Hand%20Bouquet%20Romantis" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Tanya &amp; Pesan</a>
+        </div>
+      </div>
+
+      <div class="product-card fade-in">
+        <div class="product-img-wrap">
+          <div class="product-img" style="background: linear-gradient(135deg, #e8f5e9 0%, #81c784 50%, #388e3c 100%);">🌿</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Papan Bunga Selamat</h3>
+          <p class="product-price">Mulai dari Rp 500.000</p>
+          <a href="https://wa.me/6281200000000?text=Halo%2C%20saya%20tertarik%20dengan%20Papan%20Bunga%20Selamat" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Tanya &amp; Pesan</a>
+        </div>
+      </div>
+
+      <div class="product-card fade-in">
+        <div class="product-img-wrap">
+          <div class="product-img" style="background: linear-gradient(135deg, #fff9c4 0%, #ffcc80 50%, #ffb74d 100%);">🌼</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Buket Ulang Tahun Pastel</h3>
+          <p class="product-price">Mulai dari Rp 300.000</p>
+          <a href="https://wa.me/6281200000000?text=Halo%2C%20saya%20tertarik%20dengan%20Buket%20Ulang%20Tahun%20Pastel" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Tanya &amp; Pesan</a>
+        </div>
+      </div>
+
+      <div class="product-card fade-in">
+        <div class="product-img-wrap">
+          <div class="product-img" style="background: linear-gradient(135deg, #f3e5f5 0%, #ce93d8 50%, #9c27b0 100%);">🌺</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Rangkaian Meja Premium</h3>
+          <p class="product-price">Mulai dari Rp 450.000</p>
+          <a href="https://wa.me/6281200000000?text=Halo%2C%20saya%20tertarik%20dengan%20Rangkaian%20Meja%20Premium" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Tanya &amp; Pesan</a>
+        </div>
+      </div>
+
+      <div class="product-card fade-in">
+        <div class="product-img-wrap">
+          <div class="product-img" style="background: linear-gradient(135deg, #eceff1 0%, #b0bec5 50%, #607d8b 100%);">🕊️</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Buket Duka Simpati</h3>
+          <p class="product-price">Mulai dari Rp 350.000</p>
+          <a href="https://wa.me/6281200000000?text=Halo%2C%20saya%20tertarik%20dengan%20Buket%20Duka%20Simpati" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Tanya &amp; Pesan</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW TO ORDER ===== -->
+<section class="section" id="cara-pesan">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="label-caps">Cara Memesan</span>
+      <h2 class="headline">Mudah, Cepat, Berkesan</h2>
+      <p class="accent-italic">Tiga langkah mudah menuju senyum mereka</p>
+    </div>
+    <div class="steps-row" style="position:relative;">
+      <div class="steps-connector"></div>
+
+      <div class="step-card fade-in">
+        <div class="step-num">1</div>
+        <h3 class="step-title">Pilih &amp; Chat</h3>
+        <p class="step-desc">Pilih dari katalog atau kirim referensi via WhatsApp.</p>
+      </div>
+
+      <div class="step-card fade-in">
+        <div class="step-num">2</div>
+        <h3 class="step-title">Diskusi &amp; Custom</h3>
+        <p class="step-desc">Tim kami akan membantu menyesuaikan budget &amp; warna.</p>
+      </div>
+
+      <div class="step-card fade-in">
+        <div class="step-num">3</div>
+        <h3 class="step-title">Bayar &amp; Terima</h3>
+        <p class="step-desc">Pesanan dirangkai dan dikirim tepat waktu ke lokasi.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section batik-bg" id="testimoni">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="label-caps">Kata Mereka</span>
+      <h2 class="headline">Dipercaya Ribuan Pelanggan</h2>
+      <p class="accent-italic">Cerita manis dari pelanggan setia</p>
+    </div>
+    <div class="testi-grid">
+
+      <div class="testi-card fade-in">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Bunganya fresh banget! Pacarku seneng banget pas nerima hand bouquetnya."</p>
+        <p class="testi-author">— Risa, Jakarta</p>
+      </div>
+
+      <div class="testi-card fade-in">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Pesan dadakan buat anniv, untung adminnya fast respon. Recommended!"</p>
+        <p class="testi-author">— Dimas, Bandung</p>
+      </div>
+
+      <div class="testi-card fade-in">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Papan bunga selamatnya gede dan desainnya elegan, gak pasaran."</p>
+        <p class="testi-author">— Bu Santi, Surabaya</p>
+      </div>
+
+      <div class="testi-card fade-in">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Rangkaian mejanya bikin ruang tamu jadi lebih hidup. Tahan lama juga."</p>
+        <p class="testi-author">— Andi, Bali</p>
+      </div>
+
+      <div class="testi-card fade-in">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Pilihan warna pastelnya cantik banget, temenku seneng pas ultah."</p>
+        <p class="testi-author">— Tiara, Yogyakarta</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="label-caps">Pertanyaan Umum</span>
+      <h2 class="headline">Ada yang Ingin Ditanyakan?</h2>
+      <p class="accent-italic">Kami siap menjawab setiap pertanyaan Anda</p>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Bisa kirim hari ini juga (Same-Day)?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Bisa, untuk pemesanan sebelum jam 14.00 WIB. Silakan hubungi admin kami untuk ketersediaan slot.
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Apakah bisa custom sesuai budget?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Tentu! Tim perangkai kami dapat menyesuaikan pilihan bunga dengan anggaran Anda tanpa mengurangi estetika.
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Free ongkir untuk area mana saja?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Gratis ongkos kirim berlaku untuk radius 5km dari studio kami. Di luar itu dikenakan tarif flat sesuai area.
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Bagaimana jika bunga layu saat sampai?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Kami menjamin kesegaran bunga. Jika terjadi kerusakan parah saat pengiriman (layu/patah), kami akan menggantinya secara gratis.
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Berapa lama daya tahan bunganya?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Rata-rata 3–5 hari di suhu ruang, tergantung jenis bunga dan perawatan (mengganti air &amp; memotong ujung batang setiap hari).
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Bisa titip pesan di kartu ucapan?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Pasti! Setiap pembelian buket dan meja sudah termasuk kartu ucapan gratis yang bisa Anda tulis pesannya sendiri.
+        </div>
+      </div>
+
+      <div class="faq-item fade-in">
+        <button class="faq-q" aria-expanded="false">
+          Metode pembayarannya apa saja?
+          <span class="material-icons faq-icon">add</span>
+        </button>
+        <div class="faq-a">
+          Kami menerima transfer bank (BCA, Mandiri), e-wallet (GoPay, OVO, ShopeePay), dan QRIS.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Col 1: Brand -->
+      <div>
+        <div class="footer-logo">🌸 Flowee</div>
+        <p class="footer-tagline">Setiap Bunga, Cerita yang Mengalir.</p>
+        <p class="footer-desc">Flowee adalah studio bunga artisan yang menghadirkan kesegaran dan keindahan ke setiap momen spesial Anda. Setiap rangkaian dibuat dengan penuh cinta dan perhatian detail.</p>
+      </div>
+      <!-- Col 2: Contact -->
+      <div>
+        <p class="footer-col-title">Hubungi Kami</p>
+        <div class="footer-contact-item">
+          <span class="material-icons">phone</span>
+          <span>+62 812-XXXX-XXXX</span>
+        </div>
+        <div class="footer-contact-item">
+          <span class="material-icons">email</span>
+          <span>hello@flowee.id</span>
+        </div>
+        <div class="footer-contact-item">
+          <span class="material-icons">location_on</span>
+          <span>Jl. Bunga Mawar No. 12,<br>Jakarta Selatan</span>
+        </div>
+      </div>
+      <!-- Col 3: CTA -->
+      <div>
+        <p class="footer-col-title">Pesan Sekarang</p>
+        <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:20px;line-height:1.6;">Siap mewujudkan rangkaian bunga impian Anda? Hubungi kami via WhatsApp sekarang.</p>
+        <a href="https://wa.me/6281200000000?text=Halo%20Flowee%2C%20saya%20ingin%20memesan%20bunga" target="_blank" rel="noopener" class="btn-wa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Pesan Sekarang via WhatsApp
+        </a>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <p class="footer-copy">© 2026 Flowee.id — Hand-arranged with love.</p>
+  </div>
+</footer>
+
+<!-- ===== FLOATING WHATSAPP ===== -->
+<a href="https://wa.me/6281200000000?text=Halo%20Flowee%2C%20saya%20ingin%20memesan%20bunga" target="_blank" rel="noopener" class="float-wa" aria-label="Chat WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white" width="30" height="30"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  // Mobile nav toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => {
+    mobileNav.classList.toggle('open');
+    const spans = hamburger.querySelectorAll('span');
+    if (mobileNav.classList.contains('open')) {
+      spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    } else {
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    }
+  });
+  // Close mobile nav on link click
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      const spans = hamburger.querySelectorAll('span');
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const answer = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-q').forEach(b => {
+        b.classList.remove('open');
+        b.setAttribute('aria-expanded', 'false');
+        b.nextElementSibling.classList.remove('open');
+      });
+      // Open clicked if it was closed
+      if (!isOpen) {
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        answer.classList.add('open');
+      }
+    });
+  });
+
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger delay for grid children
+        const delay = entry.target.dataset.delay || 0;
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  // Add stagger delays to grid items
+  document.querySelectorAll('.products-grid .fade-in').forEach((el, i) => {
+    el.dataset.delay = (i % 3) * 100;
+  });
+  document.querySelectorAll('.testi-grid .fade-in').forEach((el, i) => {
+    el.dataset.delay = (i % 3) * 100;
+  });
+  document.querySelectorAll('.steps-row .fade-in').forEach((el, i) => {
+    el.dataset.delay = i * 120;
+  });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

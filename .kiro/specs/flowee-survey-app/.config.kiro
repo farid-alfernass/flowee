@@ -1,0 +1,8 @@
+{
+  "specVersion": "1.0",
+  "name": "flowee-survey-app",
+  "displayName": "Flowee Survey App - Partner Recruitment Tool",
+  "description": "Internal web app for field team to survey and onboard florist partners",
+  "createdAt": "2026-05-17",
+  "status": "draft"
+}

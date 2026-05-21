@@ -1,0 +1,40 @@
+# Vercel
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Next.js build output
+survey-app/.next/
+survey-app/out/
+
+# Dependencies
+survey-app/node_modules/
+
+# Database (local dev only)
+survey-app/dev.db
+survey-app/dev.db-shm
+survey-app/dev.db-wal
+
+# PWA generated files
+survey-app/public/sw.js
+survey-app/public/workbox-*.js
+
+# Environment files
+survey-app/.env.local
+survey-app/.env.production.local
+survey-app/.env.development.local
+
+# TypeScript build info
+survey-app/tsconfig.tsbuildinfo

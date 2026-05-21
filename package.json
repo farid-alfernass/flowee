@@ -1,0 +1,13 @@
+{
+  "name": "flowee",
+  "version": "1.0.0",
+  "description": "Flowee - Karangan Bunga Artisan Segar & Indah",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["flowee", "bunga", "flower", "bouquet", "artisan"],
+  "author": "Flowee.id",
+  "license": "MIT"
+}

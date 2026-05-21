@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "name": "flowee",
+  "framework": "nextjs",
+  "rootDirectory": "survey-app",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": ".next"
+}
