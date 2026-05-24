@@ -13,15 +13,6 @@ const nextConfig: NextConfig = {
   },
   headers: async () => [
     {
-      source: '/api/auth/:path*',
-      headers: [
-        { key: 'Access-Control-Allow-Origin', value: '*' },
-        { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
-        { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization, Cookie' },
-        { key: 'Access-Control-Allow-Credentials', value: 'true' },
-      ],
-    },
-    {
       source: '/(.*)',
       headers: [
         { key: 'X-Frame-Options', value: 'DENY' },
