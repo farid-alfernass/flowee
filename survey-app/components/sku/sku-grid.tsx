@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -13,6 +13,9 @@ interface SKU {
   harga: number
   hargaReseller: number
   foto1Url: string
+  foto2Url?: string
+  foto3Url?: string
+  foto4Url?: string
   diskon: number | null
 }
 
@@ -94,43 +97,32 @@ export function SKUGrid({ products }: SKUGridProps) {
         {filtered.map((product) => {
           const margin = getMargin(product.harga, product.hargaReseller)
           const isHighMargin = margin === maxMargin && margin > 0
+          const images = [product.foto1Url, product.foto2Url, product.foto3Url, product.foto4Url].filter(Boolean) as string[]
 
           return (
-            <Link key={product.id} href={`/apps/produk/${product.id}/edit`}>
-              <Card
-                className={`overflow-hidden hover:bg-muted/50 transition-colors ${
-                  isHighMargin ? 'ring-1 ring-primary/30' : ''
-                }`}
-              >
-                <div className="relative aspect-square bg-muted">
-                  {product.foto1Url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={product.foto1Url}
-                      alt={product.namaBarang}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center">
-                      <Package className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                  )}
-                  {isHighMargin && (
-                    <div className="absolute top-1 right-1">
-                      <Badge className="text-xs py-0 bg-primary">
-                        Margin Tinggi
-                      </Badge>
-                    </div>
-                  )}
-                  {product.diskon && product.diskon > 0 && (
-                    <div className="absolute top-1 left-1">
-                      <Badge variant="destructive" className="text-xs py-0">
-                        -{product.diskon}%
-                      </Badge>
-                    </div>
-                  )}
+            <Card
+              key={product.id}
+              className={`overflow-hidden ${
+                isHighMargin ? 'ring-1 ring-primary/30' : ''
+              }`}
+            >
+              <ProductImageSwiper images={images} alt={product.namaBarang} />
+              {isHighMargin && (
+                <div className="absolute top-1 right-1 z-10">
+                  <Badge className="text-xs py-0 bg-primary">
+                    Margin Tinggi
+                  </Badge>
                 </div>
-                <CardContent className="p-2">
+              )}
+              {product.diskon && product.diskon > 0 && (
+                <div className="absolute top-1 left-1 z-10">
+                  <Badge variant="destructive" className="text-xs py-0">
+                    -{product.diskon}%
+                  </Badge>
+                </div>
+              )}
+              <Link href={`/apps/produk/${product.id}`}>
+                <CardContent className="p-2 hover:bg-muted/50 transition-colors">
                   <p className="text-xs font-medium truncate">{product.namaBarang}</p>
                   <p className="text-xs text-muted-foreground">
                     {kategoriLabels[product.kategori] || product.kategori}
@@ -145,11 +137,81 @@ export function SKUGrid({ products }: SKUGridProps) {
                     Margin: {margin}%
                   </p>
                 </CardContent>
-              </Card>
-            </Link>
+              </Link>
+            </Card>
           )
         })}
       </div>
+    </div>
+  )
+}
+
+// Mini image swiper for product cards
+function ProductImageSwiper({ images, alt }: { images: string[]; alt: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    const diff = touchStartX.current - touchEndX.current
+    const threshold = 30
+
+    if (diff > threshold && currentIndex < images.length - 1) {
+      setCurrentIndex((prev) => prev + 1)
+    } else if (diff < -threshold && currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1)
+    }
+  }, [currentIndex, images.length])
+
+  if (images.length === 0) {
+    return (
+      <div className="relative aspect-square bg-muted flex items-center justify-center">
+        <Package className="h-8 w-8 text-muted-foreground" />
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className="relative aspect-square overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div
+        className="flex h-full transition-transform duration-200 ease-out"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
+        {images.map((src, index) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={index}
+            src={src}
+            alt={`${alt} ${index + 1}`}
+            className="h-full w-full shrink-0 object-cover"
+          />
+        ))}
+      </div>
+      {images.length > 1 && (
+        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-1">
+          {images.map((_, index) => (
+            <div
+              key={index}
+              className={`h-1.5 w-1.5 rounded-full ${
+                index === currentIndex ? 'bg-white' : 'bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

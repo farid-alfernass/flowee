@@ -54,6 +54,9 @@ interface SKU {
   harga: number
   hargaReseller: number
   foto1Url: string
+  foto2Url?: string
+  foto3Url?: string
+  foto4Url?: string
   diskon: number | null
 }
 

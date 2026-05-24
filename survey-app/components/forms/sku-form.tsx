@@ -35,7 +35,7 @@ const skuSchema = z.object({
   deskripsi: z.string().max(500).optional(),
   harga: z.number().positive('Harga harus lebih dari 0'),
   hargaReseller: z.number().positive('Harga reseller harus lebih dari 0'),
-  diskon: z.number().min(0).max(50).optional(),
+  diskon: z.number().min(0).max(50).default(0),
   ukuran: z.enum(['small', 'medium', 'large', 'extra_large']).optional(),
   foto1Url: z.string().min(1, 'Minimal 1 foto wajib diupload'),
   foto2Url: z.string().optional(),
@@ -373,7 +373,10 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
           min="0"
           max="50"
           disabled={isLoading}
-          {...register('diskon', { valueAsNumber: true })}
+          {...register('diskon', {
+            valueAsNumber: true,
+            setValueAs: (v: string) => (v === '' || isNaN(Number(v)) ? 0 : Number(v)),
+          })}
           className={errors.diskon ? 'border-destructive' : ''}
         />
         {errors.diskon && (
