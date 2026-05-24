@@ -161,8 +161,17 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
     }
   }
 
+  const onFormError = (formErrors: Record<string, unknown>) => {
+    const firstError = Object.entries(formErrors)[0]
+    if (firstError) {
+      const [field, error] = firstError
+      const message = (error as { message?: string })?.message || `Field ${field} tidak valid`
+      toast.error(message)
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
+    <form onSubmit={handleSubmit(onSubmit, onFormError)} className="space-y-6 p-4">
       {/* Foto Produk */}
       <div className="space-y-3">
         <Label>
