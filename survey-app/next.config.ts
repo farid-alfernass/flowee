@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['better-sqlite3'],
+  serverExternalPackages: ['@libsql/client'],
   images: {
     remotePatterns: [
       {
@@ -15,15 +15,9 @@ const nextConfig: NextConfig = {
     {
       source: '/api/auth/:path*',
       headers: [
-        {
-          key: 'Access-Control-Allow-Origin',
-          value: process.env['NEXT_PUBLIC_APP_URL'] || 'https://flowee.id',
-        },
+        { key: 'Access-Control-Allow-Origin', value: 'https://flowee.id' },
         { key: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' },
-        {
-          key: 'Access-Control-Allow-Headers',
-          value: 'Content-Type, Authorization',
-        },
+        { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         { key: 'Access-Control-Allow-Credentials', value: 'true' },
       ],
     },
