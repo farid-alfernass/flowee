@@ -1,33 +1,9 @@
+import { drizzle } from 'drizzle-orm/better-sqlite3'
+import Database from 'better-sqlite3'
 import * as schema from './schema'
 
-// Support both local SQLite (dev) and Turso/libsql (production)
-// DATABASE_URL=file:./dev.db  → local SQLite via better-sqlite3
-// DATABASE_URL=libsql://...   → Turso via @libsql/client
-
-function createDb() {
-  const url = process.env['DATABASE_URL'] || 'file:./dev.db'
-
-  if (url.startsWith('libsql://') || url.startsWith('https://')) {
-    // Production: Turso
-    const { drizzle } = require('drizzle-orm/libsql')
-    const { createClient } = require('@libsql/client')
-    const client = createClient({
-      url,
-      authToken: process.env['DATABASE_AUTH_TOKEN'],
-    })
-    return drizzle(client, { schema })
-  } else {
-    // Development: local SQLite
-    const { drizzle } = require('drizzle-orm/better-sqlite3')
-    const Database = require('better-sqlite3')
-    // Strip "file:" prefix if present
-    const filePath = url.replace(/^file:/, '')
-    const sqlite = new Database(filePath)
-    return drizzle(sqlite, { schema })
-  }
-}
-
-export const db = createDb()
+const sqlite = new Database(process.env.DATABASE_URL || 'dev.db')
+export const db = drizzle(sqlite, { schema })
 
 // Helper function to generate unique IDs
 export function generateRekananId(): string {
@@ -54,6 +30,7 @@ export function generateSKUId(): string {
 
 // Validation helpers
 export function validateWhatsAppNumber(number: string): boolean {
+  // Format: +62xxx (10-13 digits)
   const regex = /^\+62[0-9]{9,12}$/
   return regex.test(number)
 }
