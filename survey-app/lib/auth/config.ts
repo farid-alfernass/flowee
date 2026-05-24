@@ -8,6 +8,9 @@ export const auth = betterAuth({
     provider: 'sqlite',
     schema: {
       user: schema.users,
+      account: schema.accounts,
+      session: schema.sessions,
+      verification: schema.verifications,
     },
   }),
   emailAndPassword: {
