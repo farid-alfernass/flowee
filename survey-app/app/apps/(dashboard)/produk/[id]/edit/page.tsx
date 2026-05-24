@@ -88,7 +88,7 @@ export default function EditProdukPage() {
       <div className="sticky top-14 z-10 flex items-center justify-between border-b bg-background px-4 py-3">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
-            <Link href={initialData ? `/rekanan/${initialData.rekananId}` : '/rekanan'}>
+            <Link href={initialData ? `/apps/rekanan/${initialData.rekananId}` : '/apps/rekanan'}>
               <ChevronLeft className="h-5 w-5" />
             </Link>
           </Button>

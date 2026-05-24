@@ -18,7 +18,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox'
 import { ImageUpload } from '@/components/forms/image-upload'
 import { JamLayananPicker, jamLayananToString, parseJamLayanan, type JamLayananValue } from '@/components/forms/jam-layanan-picker'
-import { PROVINCES, getCitiesByProvince } from '@/lib/data/indonesia'
+import { PROVINCES, getCitiesByProvince, getDistrictsByCity } from '@/lib/data/indonesia'
 import { Loader2, MapPin } from 'lucide-react'
 import { toast } from 'sonner'
 import { validateWhatsAppNumber } from '@/lib/validators'
@@ -60,6 +60,7 @@ export function RekananForm({ initialData, rekananId, mode }: RekananFormProps) 
   const [isLoading, setIsLoading] = useState(false)
   const [isGettingLocation, setIsGettingLocation] = useState(false)
   const [cities, setCities] = useState<string[]>([])
+  const [districts, setDistricts] = useState<string[]>([])
   const [jamLayananValue, setJamLayananValue] = useState<JamLayananValue | undefined>(
     () => parseJamLayanan(initialData?.jamLayanan)
   )
@@ -77,11 +78,13 @@ export function RekananForm({ initialData, rekananId, mode }: RekananFormProps) 
       status: 'active',
       ongkirStatus: 'negosiasi',
       resellerAllowed: false,
+      provinsi: 'DKI Jakarta',
       ...initialData,
     },
   })
 
   const selectedProvinsi = watch('provinsi')
+  const selectedKabKota = watch('kabKota')
   const resellerAllowed = watch('resellerAllowed')
   const fotoTokoUrl = watch('fotoTokoUrl')
   const latitude = watch('latitude')
@@ -96,6 +99,16 @@ export function RekananForm({ initialData, rekananId, mode }: RekananFormProps) 
       }
     }
   }, [selectedProvinsi, setValue, initialData?.kabKota])
+
+  useEffect(() => {
+    if (selectedKabKota) {
+      const districtsList = getDistrictsByCity(selectedKabKota)
+      setDistricts(districtsList)
+      if (!initialData?.kecamatan) {
+        setValue('kecamatan', '')
+      }
+    }
+  }, [selectedKabKota, setValue, initialData?.kecamatan])
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
@@ -337,13 +350,36 @@ export function RekananForm({ initialData, rekananId, mode }: RekananFormProps) 
         <Label htmlFor="kecamatan">
           Kecamatan <span className="text-destructive">*</span>
         </Label>
-        <Input
-          id="kecamatan"
-          placeholder="Nama kecamatan"
-          disabled={isLoading}
-          {...register('kecamatan')}
-          className={errors.kecamatan ? 'border-destructive' : ''}
-        />
+        {districts.length > 0 ? (
+          <Select
+            value={watch('kecamatan')}
+            onValueChange={(val) => setValue('kecamatan', val)}
+            disabled={isLoading || !selectedKabKota}
+          >
+            <SelectTrigger className={errors.kecamatan ? 'border-destructive' : ''}>
+              <SelectValue
+                placeholder={
+                  selectedKabKota ? 'Pilih kecamatan' : 'Pilih kabupaten/kota dulu'
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {districts.map((district) => (
+                <SelectItem key={district} value={district}>
+                  {district}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : (
+          <Input
+            id="kecamatan"
+            placeholder="Nama kecamatan"
+            disabled={isLoading}
+            {...register('kecamatan')}
+            className={errors.kecamatan ? 'border-destructive' : ''}
+          />
+        )}
         {errors.kecamatan && (
           <p className="text-sm text-destructive">{errors.kecamatan.message}</p>
         )}

@@ -56,7 +56,7 @@ export default function EditRekananPage() {
       {/* Header */}
       <div className="sticky top-14 z-10 flex items-center gap-3 border-b bg-background px-4 py-3">
         <Button variant="ghost" size="icon" asChild>
-          <Link href={`/rekanan/${id}`}>
+          <Link href={`/apps/rekanan/${id}`}>
             <ChevronLeft className="h-5 w-5" />
           </Link>
         </Button>

@@ -262,7 +262,7 @@ export function RekananListContent() {
       ) : (
         <div className="space-y-3">
           {rekananList.map((rekanan) => (
-            <Link key={rekanan.id} href={`/rekanan/${rekanan.id}`}>
+            <Link key={rekanan.id} href={`/apps/rekanan/${rekanan.id}`}>
               <Card className="hover:bg-muted/50 transition-colors">
                 <CardContent className="p-4">
                   <div className="flex gap-3">

@@ -152,7 +152,7 @@ export default function RekananDetailPage() {
           </div>
         </div>
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/rekanan/${id_param}/edit`}>
+          <Link href={`/apps/rekanan/${id_param}/edit`}>
             <Edit className="mr-1 h-4 w-4" />
             Edit
           </Link>
@@ -299,7 +299,7 @@ export default function RekananDetailPage() {
               <h2 className="font-semibold">Produk ({products.length})</h2>
             </div>
             <Button asChild size="sm">
-              <Link href={`/produk/new?rekananId=${id_param}`}>
+              <Link href={`/apps/produk/new?rekananId=${id_param}`}>
                 <Plus className="mr-1 h-4 w-4" />
                 Tambah
               </Link>
@@ -318,7 +318,7 @@ export default function RekananDetailPage() {
             </a>
           </Button>
           <Button variant="outline" className="touch-target" asChild>
-            <Link href={`/rekanan/${id_param}/edit`}>
+            <Link href={`/apps/rekanan/${id_param}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
               Edit Toko
             </Link>

@@ -96,7 +96,7 @@ export function SKUGrid({ products }: SKUGridProps) {
           const isHighMargin = margin === maxMargin && margin > 0
 
           return (
-            <Link key={product.id} href={`/produk/${product.id}/edit`}>
+            <Link key={product.id} href={`/apps/produk/${product.id}/edit`}>
               <Card
                 className={`overflow-hidden hover:bg-muted/50 transition-colors ${
                   isHighMargin ? 'ring-1 ring-primary/30' : ''
