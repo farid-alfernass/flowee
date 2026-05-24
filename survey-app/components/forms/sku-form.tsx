@@ -35,7 +35,10 @@ const skuSchema = z.object({
   deskripsi: z.string().max(500).optional(),
   harga: z.number().positive('Harga harus lebih dari 0'),
   hargaReseller: z.number().positive('Harga reseller harus lebih dari 0'),
-  diskon: z.number().min(0).max(50).default(0),
+  diskon: z
+    .union([z.number().min(0).max(50), z.nan()])
+    .transform((v) => (isNaN(v) ? 0 : v))
+    .default(0),
   ukuran: z.enum(['small', 'medium', 'large', 'extra_large']).optional(),
   foto1Url: z.string().min(1, 'Minimal 1 foto wajib diupload'),
   foto2Url: z.string().optional(),
@@ -117,10 +120,19 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
       const url = mode === 'create' ? '/api/sku' : `/api/sku/${skuId}`
       const method = mode === 'create' ? 'POST' : 'PATCH'
 
+      // Clean up empty optional URL fields
+      const payload = {
+        ...data,
+        foto2Url: data.foto2Url || null,
+        foto3Url: data.foto3Url || null,
+        foto4Url: data.foto4Url || null,
+        deskripsi: data.deskripsi || null,
+      }
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       })
 
       const result = await res.json()
@@ -373,10 +385,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
           min="0"
           max="50"
           disabled={isLoading}
-          {...register('diskon', {
-            valueAsNumber: true,
-            setValueAs: (v: string) => (v === '' || isNaN(Number(v)) ? 0 : Number(v)),
-          })}
+          {...register('diskon', { valueAsNumber: true })}
           className={errors.diskon ? 'border-destructive' : ''}
         />
         {errors.diskon && (
