@@ -16,11 +16,11 @@ export function ImageCarousel({ images, alt, aspectRatio = 'square' }: ImageCaro
   const touchEndX = useRef(0)
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
+    touchStartX.current = e.touches[0]?.clientX ?? 0
   }, [])
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX
+    touchEndX.current = e.touches[0]?.clientX ?? 0
   }, [])
 
   const handleTouchEnd = useCallback(() => {

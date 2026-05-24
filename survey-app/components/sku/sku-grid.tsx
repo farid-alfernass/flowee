@@ -102,7 +102,7 @@ export function SKUGrid({ products }: SKUGridProps) {
           return (
             <Card
               key={product.id}
-              className={`overflow-hidden ${
+              className={`relative overflow-hidden ${
                 isHighMargin ? 'ring-1 ring-primary/30' : ''
               }`}
             >
@@ -153,11 +153,11 @@ function ProductImageSwiper({ images, alt }: { images: string[]; alt: string }) 
   const touchEndX = useRef(0)
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
+    touchStartX.current = e.touches[0]?.clientX ?? 0
   }, [])
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX
+    touchEndX.current = e.touches[0]?.clientX ?? 0
   }, [])
 
   const handleTouchEnd = useCallback(() => {
