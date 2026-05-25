@@ -273,7 +273,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
       <div className="space-y-2">
         <Label>Tipe Bunga</Label>
         <Select
-          value={watch('type') || ''}
+          value={watch('type') ?? ''}
           onValueChange={(val) => setValue('type', val || undefined)}
           disabled={isLoading}
         >
@@ -294,7 +294,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
       <div className="space-y-2">
         <Label>Ukuran</Label>
         <Select
-          value={watch('ukuran') || ''}
+          value={watch('ukuran') ?? ''}
           onValueChange={(val) => setValue('ukuran', val || undefined)}
           disabled={isLoading}
         >
