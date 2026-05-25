@@ -31,16 +31,16 @@ const skuSchema = z.object({
     'sympathy_flower',
     'custom_arrangement',
   ]),
-  type: z.string().optional(),
-  deskripsi: z.string().max(500).optional(),
+  type: z.string().nullish(),
+  deskripsi: z.string().max(500).nullish(),
   harga: z.number().positive('Harga harus lebih dari 0'),
   hargaReseller: z.number().positive('Harga reseller harus lebih dari 0'),
   diskon: z.coerce.number().min(0).max(50).default(0),
-  ukuran: z.string().optional(),
+  ukuran: z.string().nullish(),
   foto1Url: z.string().min(1, 'Minimal 1 foto wajib diupload'),
-  foto2Url: z.string().optional(),
-  foto3Url: z.string().optional(),
-  foto4Url: z.string().optional(),
+  foto2Url: z.string().nullish(),
+  foto3Url: z.string().nullish(),
+  foto4Url: z.string().nullish(),
 })
 
 type SKUFormData = z.infer<typeof skuSchema>
