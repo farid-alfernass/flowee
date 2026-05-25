@@ -137,7 +137,7 @@ export default function RekananDetailPage() {
     ? `https://www.google.com/maps?q=${rekanan.latitude},${rekanan.longitude}`
     : `https://www.google.com/maps/search/${encodeURIComponent(rekanan.alamat + ', ' + rekanan.kabKota)}`
 
-  const waUrl = `https://wa.me/${rekanan.noWa.replace('+', '')}`
+  const waUrl = `https://wa.me/${rekanan.noWa.startsWith('0') ? '62' + rekanan.noWa.slice(1) : rekanan.noWa.replace('+', '')}`
 
   return (
     <div className="space-y-4">

@@ -34,8 +34,8 @@ export function generateSKUId(): string {
 
 // Validation helpers
 export function validateWhatsAppNumber(number: string): boolean {
-  // Format: +62xxx (10-13 digits)
-  const regex = /^\+62[0-9]{9,12}$/
+  // Format: 08xxx (10-13 digits starting with 08)
+  const regex = /^08[0-9]{8,11}$/
   return regex.test(number)
 }
 

@@ -30,7 +30,7 @@ const rekananSchema = z.object({
     .string()
     .min(1, 'Nomor WhatsApp wajib diisi')
     .refine(validateWhatsAppNumber, {
-      message: 'Format: +62xxx (contoh: +6281234567890)',
+      message: 'Format: 08xxx (contoh: 081234567890)',
     }),
   resellerAllowed: z.boolean().default(false),
   fotoTokoUrl: z.string().min(1, 'Foto toko wajib diupload'),
@@ -251,7 +251,7 @@ export function RekananForm({ initialData, rekananId, mode }: RekananFormProps) 
         <Input
           id="noWa"
           type="tel"
-          placeholder="+6281234567890"
+          placeholder="081234567890"
           inputMode="tel"
           disabled={isLoading}
           {...register('noWa')}

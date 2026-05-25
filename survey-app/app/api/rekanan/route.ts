@@ -15,7 +15,7 @@ const createRekananSchema = z.object({
     .string()
     .min(1, 'Nomor WhatsApp wajib diisi')
     .refine(validateWhatsAppNumber, {
-      message: 'Format nomor WhatsApp tidak valid. Gunakan format +62xxx',
+      message: 'Format nomor WhatsApp tidak valid. Gunakan format 08xxx',
     }),
   resellerAllowed: z.boolean().default(false),
   fotoTokoUrl: z.string().url('URL foto tidak valid'),

@@ -31,15 +31,12 @@ const skuSchema = z.object({
     'sympathy_flower',
     'custom_arrangement',
   ]),
-  type: z.enum(['fresh', 'artificial', 'mixed']).optional(),
+  type: z.string().optional(),
   deskripsi: z.string().max(500).optional(),
   harga: z.number().positive('Harga harus lebih dari 0'),
   hargaReseller: z.number().positive('Harga reseller harus lebih dari 0'),
-  diskon: z
-    .union([z.number().min(0).max(50), z.nan()])
-    .transform((v) => (isNaN(v) ? 0 : v))
-    .default(0),
-  ukuran: z.enum(['small', 'medium', 'large', 'extra_large']).optional(),
+  diskon: z.coerce.number().min(0).max(50).default(0),
+  ukuran: z.string().optional(),
   foto1Url: z.string().min(1, 'Minimal 1 foto wajib diupload'),
   foto2Url: z.string().optional(),
   foto3Url: z.string().optional(),
@@ -277,9 +274,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
         <Label>Tipe Bunga</Label>
         <Select
           value={watch('type') || ''}
-          onValueChange={(val) =>
-            setValue('type', val as SKUFormData['type'] || undefined)
-          }
+          onValueChange={(val) => setValue('type', val || undefined)}
           disabled={isLoading}
         >
           <SelectTrigger>
@@ -300,9 +295,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
         <Label>Ukuran</Label>
         <Select
           value={watch('ukuran') || ''}
-          onValueChange={(val) =>
-            setValue('ukuran', val as SKUFormData['ukuran'] || undefined)
-          }
+          onValueChange={(val) => setValue('ukuran', val || undefined)}
           disabled={isLoading}
         >
           <SelectTrigger>
