@@ -158,7 +158,8 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
     }
   }
 
-  const onFormError = (formErrors: Record<string, unknown>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onFormError = (formErrors: any) => {
     const firstError = Object.entries(formErrors)[0]
     if (firstError) {
       const [field, error] = firstError
