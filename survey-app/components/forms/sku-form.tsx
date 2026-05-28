@@ -23,27 +23,21 @@ import { toast } from 'sonner'
 const skuSchema = z.object({
   rekananId: z.string().min(1),
   namaBarang: z.string().min(1, 'Nama barang wajib diisi').max(200),
-  kategori: z.enum([
-    'buket_wisuda',
-    'hand_bouquet',
-    'papan_bunga',
-    'standing_flower',
-    'sympathy_flower',
-    'custom_arrangement',
-  ]),
-  type: z.string().nullish(),
-  deskripsi: z.string().max(500).nullish(),
+  kategori: z.string().min(1, 'Kategori wajib dipilih'),
+  type: z.any().optional(),
+  deskripsi: z.any().optional(),
   harga: z.number().positive('Harga harus lebih dari 0'),
   hargaReseller: z.number().positive('Harga reseller harus lebih dari 0'),
-  diskon: z.coerce.number().min(0).max(50).default(0),
-  ukuran: z.string().nullish(),
+  diskon: z.any().optional(),
+  ukuran: z.any().optional(),
   foto1Url: z.string().min(1, 'Minimal 1 foto wajib diupload'),
-  foto2Url: z.string().nullish(),
-  foto3Url: z.string().nullish(),
-  foto4Url: z.string().nullish(),
+  foto2Url: z.any().optional(),
+  foto3Url: z.any().optional(),
+  foto4Url: z.any().optional(),
 })
 
-type SKUFormData = z.infer<typeof skuSchema>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SKUFormData = any
 
 interface SKUFormProps {
   rekananId: string
@@ -112,6 +106,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
   const foto4Url = watch('foto4Url')
 
   const onSubmit = async (data: SKUFormData) => {
+    console.log('[SKU Form] Submit data:', JSON.stringify(data, null, 2))
     setIsLoading(true)
     try {
       const url = mode === 'create' ? '/api/sku' : `/api/sku/${skuId}`
@@ -160,11 +155,12 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFormError = (formErrors: any) => {
+    console.error('[SKU Form] Validation errors:', JSON.stringify(formErrors, null, 2))
     const firstError = Object.entries(formErrors)[0]
     if (firstError) {
       const [field, error] = firstError
       const message = (error as { message?: string })?.message || `Field ${field} tidak valid`
-      toast.error(message)
+      toast.error(`${field}: ${message}`)
     }
   }
 
@@ -251,7 +247,7 @@ export function SKUForm({ rekananId, skuId, initialData, mode }: SKUFormProps) {
         </Label>
         <Select
           value={watch('kategori')}
-          onValueChange={(val) => setValue('kategori', val as SKUFormData['kategori'])}
+          onValueChange={(val) => setValue('kategori', val)}
           disabled={isLoading}
         >
           <SelectTrigger className={errors.kategori ? 'border-destructive' : ''}>
